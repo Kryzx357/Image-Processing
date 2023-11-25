@@ -5,16 +5,14 @@ from util import get_limits
 
 
 yellow = [0, 255, 255]  # yellow in BGR colorspace
-green = [0, 255, 0]  # yellow in BGR colorspace
-red = [3, 73, 252]  # yellow in BGR colorspace
-cap = cv2.VideoCapture(1)
+green = [0, 255, 0]  # green in BGR colorspace
+red = [0, 0, 255]  # red in BGR colorspace
 
-while True:
-    rate, frame = cap.read()
 
+def load_lims(frame):
     hsv_Image = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    lowerLimit, upperLimit = get_limits(color=green)
+    lowerLimit, upperLimit = get_limits(color=yellow)
 
     mask = cv2.inRange(hsv_Image, lowerLimit, upperLimit)
 
@@ -26,6 +24,15 @@ while True:
         x1, y1, x2, y2 = bbox
 
         frame = cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 5)
+    return frame
+
+
+cap = cv2.VideoCapture(1)
+
+while True:
+    rate, frame = cap.read()
+
+    frame = load_lims(frame)
 
     cv2.imshow('web_cam', frame)
 
